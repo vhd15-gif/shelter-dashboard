@@ -56,10 +56,21 @@ Dmax = st.sidebar.slider("Maximum travel distance (miles)", min_value=1.0, max_v
 
 st.sidebar.markdown("---")
 st.sidebar.header("Solver options")
-solver_choice = st.sidebar.selectbox("Solver", options=["Auto (PULP_CBC_CMD)", "CBC: provide path", "GLPK_CMD"])
+solver_choice = st.sidebar.selectbox(
+    "Solver",
+    options=[
+        "Auto (PULP_CBC_CMD)",
+        "PuLP default (m.solve())",
+        "CBC: provide path",
+        "GLPK_CMD",
+    ],
+)
 cbc_path = ""
 if solver_choice == "CBC: provide path":
-    cbc_path = st.sidebar.text_input("Path to cbc.exe (e.g. C:\\\\cbc\\\\cbc.exe)", value="")
+    cbc_path = st.sidebar.text_input(
+        "Path to cbc.exe (e.g. C:\\cbc\\cbc.exe)", value=""
+    )
+
 
 st.sidebar.markdown("---")
 st.sidebar.header("Advanced")
@@ -361,4 +372,5 @@ st.markdown(
     "Download CBC and enter in the Solver options. \n"
     "- If this still does not work, install GLPK and select `GLPK_CMD` in the Solver options.\n"
 )
+
 
