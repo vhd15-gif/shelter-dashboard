@@ -20,12 +20,8 @@ st.markdown(
     "Adjust model parameters on the left. The model runs in the background and shows decisions, KPIs, and sensitivity."
 )
 
-# ---------------------------
-# Data: ZIPs and manual populations (from your Colab code)
-# ---------------------------
-ORIGINAL_ZIPS = [
-    33012, 33157, 33186, 33015, 33033
-]
+#Definition of ZIP Codes in the county
+ORIGINAL_ZIPS = [33012, 33157, 33186, 33015, 33033, 33178, 33142, 33032, 33177, 33018, 33125, 33196, 33161, 33176, 33165, 33175, 33162, 33179, 33193, 33147, 33126, 33016, 33155, 33169, 33010, 33160, 33014, 33172, 33055, 33134, 33056, 33030, 33141, 33139, 33135, 33133, 33174, 33183, 33173, 33130, 33180, 33156, 33150, 33143, 33054, 33013, 33185, 33145, 33138, 33127, 33144, 33166, 33137, 33189, 33034, 33168, 33167, 33131, 33184, 33181, 33140, 33187, 33146, 33132, 33190, 33136, 33035, 33129, 33149, 33154, 33170, 33182, 33128, 33194, 33031, 33158, 33122, 33109, 33101, 33039, ]
 ZIPS = ORIGINAL_ZIPS.copy()
 I = J = ZIPS
 
@@ -48,9 +44,7 @@ manual_populations = {
     33158: 6536, 33122: 1873, 33109: 792
 }
 
-# ---------------------------
-# Sidebar: user inputs & options
-# ---------------------------
+# user input
 st.sidebar.header("Model Parameters")
 alpha_pct = st.sidebar.slider("Minimum coverage per ZIP (%)", min_value=5, max_value=25, value=10, step=1)
 alpha = alpha_pct / 100.0
@@ -77,9 +71,7 @@ st.sidebar.markdown("**Optional uploads**")
 pop_file = st.sidebar.file_uploader("Upload population CSV (columns: ZIP,pop)", type=["csv"])
 coords_file = st.sidebar.file_uploader("Upload coords CSV (columns: ZIP,lat,lon)", type=["csv"])
 
-# ---------------------------
-# Prepare population dict (use censusdata if available else manual)
-# ---------------------------
+# censusdata information
 @st.cache_data(show_spinner=False)
 def prepare_populations(zips, uploaded_pop_file):
     pop = {}
@@ -121,9 +113,7 @@ def prepare_populations(zips, uploaded_pop_file):
 
 pop = prepare_populations(ZIPS, pop_file)
 
-# ---------------------------
-# Geocode or accept uploaded coords
-# ---------------------------
+# geocoder information
 @st.cache_data(show_spinner=False)
 def geocode_zips(zips, uploaded_coords_file=None):
     coords = {}
@@ -165,9 +155,7 @@ if not all_geocoded:
         "Note: Some ZIP geocodes failed. You can upload a coords CSV (columns: ZIP,lat,lon) to avoid geocoding rate limits."
     )
 
-# ---------------------------
-# Distance matrix and accessibility matrix a(i,j)
-# ---------------------------
+# distances and accessibility
 @st.cache_data(show_spinner=False)
 def build_distance_and_a(zips, coords, Dmax):
     dist = {}
@@ -199,9 +187,7 @@ E = [
 ]
 e = {z: (1 if z in E else 0) for z in ZIPS}
 
-# ---------------------------
-# Build and solve model function
-# ---------------------------
+# function to solve model
 def build_and_solve_model(alpha_val, C_val, Dmax_val, solver_choice="Auto", cbc_path_str=""):
     # recompute a based on new Dmax
     a_local = { (i,j): (1 if dist[(i,j)] <= Dmax_val else 0) for i in ZIPS for j in ZIPS }
@@ -370,9 +356,9 @@ else:
 # ---------------------------
 st.markdown("---")
 st.markdown(
-    "**Notes & Troubleshooting**\n\n"
-    "- On Windows you may need to provide a path to a compatible `cbc.exe` if the default CBC binary packaged with PuLP is incompatible with your Python architecture. "
-    "Download CBC (Windows x64) from the COIN-OR releases and enter the path in the Solver options. \n"
-    "- Alternatively, install GLPK and select `GLPK_CMD`.\n"
-    "- To avoid geocoding rate limits, upload a CSV with ZIP,lat,lon."
+    "Troubleshooting\n\n"
+    "- Windows --> use `cbc.exe` if PuLP is incompatible with your run of the model. "
+    "Download CBC and enter in the Solver options. \n"
+    "- If this still does not work, install GLPK and select `GLPK_CMD` in the Solver options.\n"
 )
+
