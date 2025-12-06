@@ -21,7 +21,8 @@ st.markdown(
 )
 
 #Definition of ZIP Codes in the county
-ORIGINAL_ZIPS = [33012, 33157, 33186, 33015, 33033]
+
+ORIGINAL_ZIPS = [33136, 33035, 33129, 33149, 33154, 33170, 33182, 33128, 33194, 33031, 33158, 33122, 33109, 33101, 33039]
 ZIPS = ORIGINAL_ZIPS.copy()
 I = J = ZIPS
 
@@ -372,6 +373,7 @@ st.markdown(
     "Download CBC and enter in the Solver options. \n"
     "- If this still does not work, install GLPK and select `GLPK_CMD` in the Solver options.\n"
 )
+
 
 
 
