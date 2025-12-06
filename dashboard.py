@@ -59,8 +59,8 @@ st.sidebar.header("Solver options")
 solver_choice = st.sidebar.selectbox(
     "Solver",
     options=[
-        "Auto (PULP_CBC_CMD)",
         "PuLP default (m.solve())",
+        "Auto (PULP_CBC_CMD)",
         "CBC: provide path",
         "GLPK_CMD",
     ],
@@ -372,5 +372,6 @@ st.markdown(
     "Download CBC and enter in the Solver options. \n"
     "- If this still does not work, install GLPK and select `GLPK_CMD` in the Solver options.\n"
 )
+
 
 
